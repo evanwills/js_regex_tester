@@ -1,138 +1,95 @@
 
-addNewRegexPairHTML = function ( a ) {
-	sep = "\n\n\t\t\t\t\t";
-	newRegExpPair	= sep + '<li id="regexp' + id + '">'
-			+ sep + "\t" + '<span>'
-			+ sep + "\t\t" + '<label for="find' + id + '">Find <span>' + id + '</span></label>'
-//			+ sep + "\t\t" + '<input type="text" name="find' + id + '" id="find' + id + '" value="" class="find" />'
-			+ sep + "\t\t" + '<input type="text" name="find[]" id="find' + id + '" value="" class="find" />'
-			+ sep + "\t" + '</span>'
-			+ sep + "\t" + '<span>'
-			+ sep + "\t\t" + '<label for="replace' + id + '">replace <span>' + id + '</span></label>'
-//			+ sep + "\t\t" + '<input type="text" name="replace' + id + '" id="replace' + id + '" value="" class="replace" />'
-			+ sep + "\t\t" + '<input type="text" name="replace[]" id="replace' + id + '" value="" class="replace" />'
-			+ sep + "\t" + '</span>'
-			+ sep + "\t" + '<span>'
-			+ sep + "\t\t" + '<label for="textarea' + id + '">
-			+ sep + "\t\t\t" + '<input type="checkbox" name="textarea' + id + '" id="textarea' + id + '" value="textarea" title="Make Find ' + id + ' and Replace ' + id + ' multi line" />'
-			+ sep + "\t\t\t" + 'Multi line'
-			+ sep + "\t\t" + '</label>'
-			+ sep + "\t" + '</span>'
-			+ sep + "\t" + '<div class="results"></div>'
-			+ sep + '</li>';
-	return newRegExpPair;
-}
-
-function ucFirst( input )
-{
-	var ch = input[0].toUpperCase();
-	for( a = 1 ; a < input.length ; a += 1 ) {
-		ch += input[a];
-	}
-	return ch;
-}
-
-addNewRegexPairNode = function ( id ) {
-
-	var bits = [ 'find' , 'replace' ];
-
-	var wrapper;
-	var span;
-	var label;
-	var label_span;
-	var input;
-	var sep = '';
-
-	wrapper = document.createElement('li');
-	wrapper.setAttribute('id' , 'regexp' + id );
-	wrapper.setAttribute('class' , 'regexPair' );
-
-	bits
-
-	for( b = 0 ; b < 2 ; b += 1 ) {
-		span = document.createElement('span');
-		label = document.createElement('label');
-		label.setAttribute( 'for' , bits[b] + id )
-		label.innerHTML = sep + ucFirst( bits[b] ) + ' ';
-
-		label_span = document.createElement('span');
-		label_span.innerHTML = id;
-
-		label.appendChild( label_span );
-
-		input = document.createElement('input');
-		input.setAttribute( 'type' , 'text' );
-		input.setAttribute( 'name' , bits[b] + id );
-		input.setAttribute( 'id' , bits[b] + id );
-		input.setAttribute( 'value' , '' );
-		input.setAttribute( 'class' , bits[b] );
-
-		span.appendChild( label );
-		span.appendChild( input );
-
-		wrapper.appendChild( span );
-		sep = ' ';
-	}
-	return wrapper;
-}
-
-
 var more = document.getElementById('add_regex_pair');
-//more.onClick(
+var less;
 
-/*
-console.log( 'This is an element of type: ' , more.nodeType );
-console.log( 'The inner HTML is ' , more.innerHTML );
-console.log( 'Child nodes: ' , more.childNodes.length );
-
-var moreParent = more.parentNode;
-var wrapper = moreParent.parentNode;
-console.log( 'wrapper contains: ', wrapper.innerHTML );
-console.log( 'parent name: ',wrapper.id );
-
-var ol = wrapper.getElementsByTagName('ol');
-console.log( 'wrapper ordered list items: ',ol[0].innerHTML );
-*/
-/*
-var newRegExpPair = '';
-for( a = regExpCount + 1 ; a < 5 ; a += 1 ) {
-	newRegExpPair += addNewRegexPairHTML( a );
-}
-
-console.log( 'new children of ol' , newRegExpPair );
-ol[0].innerHTML = ol[0] + newRegExpPair;
-*/
-
-/*
-var counter = regExpCount;
-for( counter = regExpCount ; counter < 9 ; counter += 1 ) {
-//	ol[0].appendChild( addNewRegexPairNode( counter ) );
-}
-*/
-more.onclick = function(){
+addRemove = function ( action ) {
+	console.log( 'action = ' + action );
 	var wrapper = document.getElementById('regexes');
 	var ol = wrapper.getElementsByTagName('ol');
-	var id;
+	var p = wrapper.getElementsByTagName('p');
 	var LIs;
+	var id;
+	var a;
+	var b;
+	var buttons;
+	var labels;
+
 	ol = ol[0];
+	p = p[0];
 
 	LIs = ol.getElementsByTagName('li');
 	id = LIs.length;
-	console.log( 'Current pair count = ',id);
-	sep = "\n\n\t\t\t\t\t";
-	newRegExpPair	= sep + '<li id="regexp' + id + '">'
-			+ sep + "\t" + '<span>'
-			+ sep + "\t\t" + '<label for="find' + id + '">Find <span>' + id + '</span></label>'
-			+ sep + "\t\t" + '<input type="text" name="find' + id + '" id="find' + id + '" value="" class="find" />'
-			+ sep + "\t" + '</span>'
-			+ sep + "\t" + '<span>'
-			+ sep + "\t\t" + '<label for="replace">replace <span>' + id + '</span></label>'
-			+ sep + "\t\t" + '<input type="text" name="replace' + id + '" id="replace' + id + '" value="" class="replace" />'
-			+ sep + "\t" + '</span>'
-			+ sep + "\t" + '<div class="results"></div>'
-			+ sep + '</li>';
-	alert();
-	ol.innerHTML += newRegExpPair;
-	console.log( 'regex pairs: ', ol.innerHTML );
-	alert('added new regexp pair');
+
+	if ( action == 'add' )
+	{
+		doit = function() {
+			console.log('add');
+			b = id + 1;console.log( 'id = ' + id  + "\nb = " + b );
+			sep = "\n\n\t\t\t\t\t";
+			newFindReplacePair = sep + '<li id="regexp' + id + '">'
+				+ sep + "\t" + '<span>'
+				+ sep + "\t\t" + '<label for="find' + id + '">Find <span>' + b + '</span></label>'
+				+ sep + "\t\t" + '<input type="text" name="find' + id + '" id="find' + id + '" value="" class="find" />'
+				+ sep + "\t" + '</span>'
+				+ sep + "\t" + '<span>'
+				+ sep + "\t\t" + '<label for="replace">Replace <span>' + id + '</span></label>'
+				+ sep + "\t\t" + '<input type="text" name="replace' + id + '" id="replace' + b + '" value="" class="replace" />'
+				+ sep + "\t" + '</span>'
+				+ sep + "\t" + '<span>'
+				+ sep + "\t\t" + '<label for="textarea' + id + '">'
+				+ sep + "\t\t\t" + '<input type="checkbox" name="textarea' + id + '" id="textarea' + b + '" value="textarea" title="Make Find ' + b + ' and Replace ' + b + ' multi line"  />'
+				+ sep + "\t\t\t" + 'Multi line'
+				+ sep + "\t\t" + '</label>'
+				+ sep + "\t" + '</span>'
+				+ sep + '</li>';
+
+			ol.innerHTML += newFindReplacePair;
+			if( id == 1 ) {
+				p.innerHTML    += sep + '<button id="remove_regex_pair">Remove</button>'
+						+ sep + '<label for="remove_regex_pair"><span>Remove</span> the last Find/Replace pair</label>';
+						
+				less = document.getElementById('remove_regex_pair');
+				less.onclick = function() {
+					addRemove( 'remove' );
+					return false;
+				}
+			}
+		};
+	}
+	else( action == 'remove' )
+	{
+		doit = function() {
+			console.log('remove');
+			b = id - 1;
+			console.log( "line: 64\nid = " + id + "\nb = " + b + "\nid > 1 = " + ( id > 1 ) );
+			if( id > 1 ) {
+				console.log( 'we can try and remove something' );
+				if( id == 2 ) {
+					conslol.log( 'we can try and remove the "Remove" button' );
+				alert();
+					button = p.getElementsByTagName('button');
+					label  = p.getElementsByTagName('label');
+					console.log( 'attempting to remove less.onclick event' );
+					less.onclick = false;
+
+//					p.removeChild( button[1] );
+					console.log( 'we removed the "Remove" button' );	
+//					p.removeChild( label[1] );
+					console.log( 'we removed the "Remove" label' );	
+				}
+				ol.removeChild( LIs[b] );
+				console.log( 'removed last Find/Replace' );
+			}
+			console.log( 'removed last Find/Replace pair and "Remove" button' );
+		};
+	}
+	doit();
+	return false;
 };
+
+more.onclick = function() {
+	addRemove( 'add' );
+	return false;
+};
+
+
