@@ -9,6 +9,11 @@ label span , #butt label {
 	top: -1000em;
 	left: -1000em;
 }
+.hidden {
+	position: absolute;
+	top: -10000em;
+	left: -10000em;
+}
 		</style>
 	</head>
 	<body>
@@ -47,8 +52,15 @@ label span , #butt label {
 					</li>
 				</ol>
 				<p>
-					<button id="add_regex_pair">Add</button>
-					<label for="add_regex_pair"><span>Add</span> another find/replace pair</label>
+					<label for="add_regex_pair">
+						<button id="add_regex_pair">Add</button>
+						another find/replace pair
+					</label>
+
+					<label for="remove_regex_pair" class="hidden">
+						<button id="remove_regex_pair">remove</button>
+						another find/replace pair
+					</label>
 				</p>
 			</fieldset>
 			<fieldset id="output">
