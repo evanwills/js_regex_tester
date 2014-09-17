@@ -18,24 +18,19 @@ regexPairAdd = function() {
 	var wrapper = document.getElementById('regexes');
 	var ol = getOl( wrapper );
 	var remover = getLabel( wrapper );
-	var LIs = null;
-	var id = 0;
-	var b = 0;
+	var LIs = ol.getElementsByTagName('li');
+	var id = LIs.length;
+	var b = id + 1;
 
-	LIs = ol.getElementsByTagName('li');
-	id = LIs.length;
-	b = id + 1;
-
-	console.log( 'id = ' + id  + "\nb = " + b );
 	sep = "\n\n\t\t\t\t\t";
 
-	ol.innerHTML   += sep + '<li id="regexp' + id + '">'
-			+ sep + "\t" + '<span>'
-			+ sep + "\t\t" + '<label for="find' + id + '">Find <span>' + b + '</span></label>'
+	ol.innerHTML   += sep + '<li id="regexp' + id + '" class="additional">'
+			+ sep + "\t" + '<span class="input">'
+			+ sep + "\t\t" + '<label for="find' + id + '" class="hidden">Find <span>' + b + '</span></label>'
 			+ sep + "\t\t" + '<input type="text" name="find' + id + '" id="find' + id + '" value="" class="find" />'
 			+ sep + "\t" + '</span>'
-			+ sep + "\t" + '<span>'
-			+ sep + "\t\t" + '<label for="replace">Replace <span>' + id + '</span></label>'
+			+ sep + "\t" + '<span class="input">'
+			+ sep + "\t\t" + '<label for="replace' + id + '" class="hidden">Replace <span>' + id + '</span></label>'
 			+ sep + "\t\t" + '<input type="text" name="replace' + id + '" id="replace' + b + '" value="" class="replace" />'
 			+ sep + "\t" + '</span>'
 			+ sep + "\t" + '<span>'
@@ -59,14 +54,9 @@ regexPairRemove = function() {
 	var wrapper = document.getElementById('regexes');
 	var ol = getOl( wrapper );
 	var remover = getLabel( wrapper );
-	var LIs = null;
-	var id = 0;
-	var b = 0;
-	var removeLabel = null;
-
-	LIs = ol.getElementsByTagName('li');
-	id = LIs.length;
-	b = id - 1;
+	var LIs = ol.getElementsByTagName('li');
+	var id = LIs.length;
+	var b = id - 1;
 
 	if( id > 1 ) {
 		if( id == 2 ) {
@@ -84,7 +74,7 @@ more.onclick = function() {
 	return false;
 };
 
-less.onclick  = function() {
+less.onclick = function() {
 	regexPairRemove( );
 	return false;
 }
