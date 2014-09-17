@@ -1,0 +1,53 @@
+body {
+	font-family: arial, helvetica, sans-serif;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+label span , #butt label {
+	position: absolute;
+	top: -1000em;
+	left: -1000em;
+}
+
+.input {
+	display: block;
+	width: 48%;
+	float: left;
+	padding-right: 2%;
+	position: relative;
+	top: -0.5em;
+}
+.input label {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 140%;
+	font-weight: bold;
+}
+.input input {
+	width: 100%;
+	border: 0.1em solid #ddd;
+	border-radius: 0.3em;
+	padding: 0.3em 0.5em;
+	margin-top: 0.2em;
+}
+
+.hidden {
+	position: absolute;
+	top: -10000em;
+	left: -10000em;
+}
+.regexes li + li {
+	margin-top: 0.75em;
+}
+input.find {
+	background-color: #dfd;
+}
+input.replace {
+	background-color: #eef;
+}
+textarea {
+	width: 99%;
+	height: 20em;
+	display:block;
+	margin-right: 1em;
+}
