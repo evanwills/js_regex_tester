@@ -31,7 +31,23 @@ label span , #butt label {
 	top: -1em;
 }
 
-
+header h1 , header h2 {
+	line-height: 1em;
+	margin: 0%;
+	text-align: center;
+}
+header h1 {
+	padding: 0.5em 0% 0.2em;
+}
+header h2 {
+	font-size: 133%;
+	font-weight: normal;
+	white-space: nowrap;
+}
+fieldset h2 {
+	font-size: 128.6%;
+	font-weight: bold;
+}
 
 .hiding {
 	position: absolute;
@@ -102,5 +118,19 @@ ol.regexes {
 	}
 	.input .hiding {
 		position: static;
+	}
+	body { padding-bottom: 7em; }
+	#butt {
+		position: fixed;
+		bottom: 0%;
+		left: 0%;
+		right: 0%;
+		padding-bottom: 1em;
+		padding-top: 1em;
+		background-color: rgba( 220 , 220 , 220 , 0.7 );
+	}
+	#butt legend { display: none; }
+	#butt ul {
+		text-align: center;
 	}
 }
