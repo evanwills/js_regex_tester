@@ -20,7 +20,24 @@ function getLabel( parentObj ) {
 	return output[1];
 }
 
-function textareaClick( parentObj ){
+function getParent( ojb , elementName ) {
+	var parentObj;
+	if( obj.parent != undefined ) {
+		parentObj = obj.parent;
+		if( parentObj.tagName == elementName ) {
+			return parentObj;	
+		} else {
+			return getParent( parentobj , elementName );
+		}
+	}
+	else {
+		return false;
+	}
+
+}
+
+function textareaClick( ){
+	var parentObj = getParent( this , 'li' );
 	var inputs = parentObj.getElementsByTagName('input');
 	var textareas;
 	var fields = [];
@@ -256,58 +273,46 @@ function replaceRegexByLine() {
 
 }
 
-var more = document.getElementById('add_regex_pair');
-var less = document.getElementById('remove_regex_pair');
-
-var submitTest = document.getElementById('test');
-var submitTestByLine = document.getElementById('test_new_line');
-
-var submitReplace = document.getElementById('replace');
-var submitReplaceByLine = document.getElementById('replace_new_line');
-
-
-more.onclick = function() {
-	regexPairAdd( );
-	return false;
-};
-
-less.onclick = function() {
-	regexPairRemove( );
-	return false;
-}
-
-
-submitTest.onchange = function() {
-	testRegex( );
-	return false;
-}
-
-submitTestByLine.onchange = function() {
-	testRegexByLine( );
-	return false;
-}
-
-submitReplace.onchange = function() {
-	submitReplace( );
-	return false;
-}
-
-submitReplaceByLine.onchange = function() {
-	replaceRegexByLine( );
-	return false;
-}
 
 
 
-doStuff = function() {
-	var wrapper = document.getElementById('regexes');
-	var ol = getOl( wrapper );
-	var LIs = ol.getElementsByTagName('li');
-	var id = LIs.length - 1;
-	var inputs = LIs[0].getElementsByTagName('input');
 
-	inputs[2].onclick = function() {
-		textareaClick( LIs[id] );
-	}
-}
-doStuff();
+
+$(document).ready(function(){
+
+	$('#more').click(function() {
+		regexPairAdd( );
+		return false;
+	});
+
+	$('#less').click(function() {
+		regexPairRemove( );
+		return false;
+	});
+
+
+	$('#submitTest').click(function() {
+		testRegex( );
+		return false;
+	});
+
+	$('#submitTestByLine').click(function() {
+		testRegexByLine( );
+		return false;
+	});
+
+	$('#submitReplace').click(function() {
+		submitReplace( );
+		return false;
+	});
+
+	$('#submitReplaceByLine').click(function() {
+		replaceRegexByLine( );
+		return false;
+	});
+
+	$('#textarea0').click(function() {
+		textareaClick();
+	});
+
+});
