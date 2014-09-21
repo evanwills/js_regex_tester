@@ -10,7 +10,10 @@
 		<script type="text/javascript" src="bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
 	</head>
 	<body>
-		<h1>Regex debugger (es5 with PHP fallback)</h1>
+		<header>
+			<h1>Regex debugger</h2>
+			<h2>(es5 with PHP fallback)</h2>
+		</header>
 		<form id="regex" method="post" action="index.html">
 			<ul class="nav nav-tabs">
 				<li><a href="#input" data-toggle="tab">Input</a></li>
@@ -22,6 +25,28 @@
 				<fieldset id="input" class="tab-pane fade">
 					<legend>Sample</legend>
 					<textarea id="sample" name="sample"></textarea>
+					<h2>Clean white space options</h2>
+					<ul class="inline">
+						<li>
+							<label>
+								<input type="checkbox" name="ws_trim" id="ws_trim" value="true" tabindex="19" />
+								Trim white space from sample
+							</label>
+						</li>
+						<li>
+							<label>
+								<input type="radio" name="ws_action" id="ws_trim_pos_before" value="true" tabindex="20" />
+								<span>Trim white space from sample</span> before processing
+							</label>
+							or
+						</li>
+						<li>
+							<label>
+								<input type="radio" name="ws_action" id="ws_trim_pos_after" value="false" checked="checked" tabindex="21" />
+								<span>Trim white space from sample</span> after processing
+							</label>
+						</li>
+					</ul>
 				</fieldset>
 
 
@@ -64,28 +89,6 @@
 				<fieldset id="output" class="hiding tab-pane fade">
 					<legend>Replacement</legend>
 					<textarea id="replace" name="replace"></textarea>
-					<h3>Clean white space options</h3>
-					<ul class="inline">
-						<li>
-							<label>
-									<input type="checkbox" name="ws_trim" id="ws_trim" value="true" tabindex="19" />
-								Trim white space from sample
-							</label>
-						</li>
-						<li>
-							<label>
-								<input type="radio" name="ws_after" id="ws_trim_pos_before" value="true" tabindex="20" />
-								<span>Trim white space from sample</span> before processing
-							</label>
-							or
-						</li>
-						<li>
-							<label>
-								<input type="radio" name="ws_after" id="ws_trim_pos_after" value="false" checked="checked" tabindex="21" />
-								<span>Trim white space from sample</span> after processing
-							</label>
-						</li>
-					</ul>
 				</fieldset>
 			</div>
 
