@@ -34,6 +34,7 @@ function textareaClick( parentObj ){
 
 	if( inputs.length === 3 ) {
 		fieldType = 'textarea';
+		var a = 0;
 		for( a = 0 ; a < 2 ; a += 1) {
 			fields[a] = inputs[a];
 		}
@@ -113,7 +114,7 @@ function regexPairAdd() {
 	var newLi = document.createElement('li');
 	newLi.setAttribute('id','regexp'+id);
 	newLi.setAttribute('class','additional row');
-
+console.log('(1) inside regexPairAdd()');
 	// the tree wrappers for the input items
 	var newSpan = [];
 	// the three labels for the input items
@@ -133,6 +134,7 @@ function regexPairAdd() {
 	// all the input fields within the list item
 	var tmpInputs = LIs[c].getElementsByTagName('input');
 
+console.log('(2) inside regexPairAdd()');
 	if( tmpInputs.length == 1 ) {
 		// if the last find/replace pair has only one list item,
 		// then it must already have textarea's so the fields
@@ -140,20 +142,25 @@ function regexPairAdd() {
 		fieldTXT = 'textarea';
 	}
 
+console.log('(3) inside regexPairAdd()');
 	// looping through to create all the nodes for the find and
 	// replace fields
+	var a = 0;
 	for( a = 0 ; a < 2 ; a += 1 ) {
 
+console.log('(3a) inside regexPairAdd()');
 		// create wrapper for the field and set attributes
 		newSpan[a] = document.createElement( 'span' );
 		newSpan[a].setAttribute( 'class' , 'input col-sm-6 col-xs-12' );
 
+console.log('(3b) inside regexPairAdd()');
 		// create label for the field and set its attributes.
 		newLabel[a] = document.createElement( 'label' );
 		newLabel[a].setAttribute( 'for' , nameTXT + id );
 		newLabel[a].setAttribute( 'class' , 'hiding' );
 		newLabel[a].innerHTML = labelTXT + ' <span>' + b + '</span>';
 
+console.log('(3c) inside regexPairAdd()');
 		// create the field itself
 		newInput[a] = document.createElement( fieldTXT );
 		newInput[a].setAttribute( 'type' , 'text' );
@@ -162,10 +169,12 @@ function regexPairAdd() {
 		newInput[a].setAttribute( 'value' , '');
 		newInput[a].setAttribute( 'class' , nameTXT + ' form-control' );
 
+console.log('(3d) inside regexPairAdd()');
 		// add the label and field to the wrapper
 		newSpan[a].appendChild(newLabel[a]);
 		newSpan[a].appendChild(newInput[a]);
 
+console.log('(3e) inside regexPairAdd()');
 		// add the wrapper to the parent li
 		newLi.appendChild(newSpan[a]);
 
@@ -174,6 +183,7 @@ function regexPairAdd() {
 		labelTXT = 'Replace';
 	}
 
+console.log('(4) inside regexPairAdd()');
 	// create the checkbox for the new find/replace pair and set its attributes
 	newSpan[2] = document.createElement( 'span' );
 	newSpan[2].setAttribute('class','col-xs-12 checkbox-check');
@@ -189,29 +199,35 @@ function regexPairAdd() {
 	newInput[2].setAttribute( 'id' , 'textarea' + id );
 	newInput[2].setAttribute( 'title' , 'Make Find ' + b + ' and Replace ' + b + ' multi line' );
 
+console.log('(5) inside regexPairAdd()');
 	// set the onclick event function for the checkbox.
 	newInput[2].onchange = function() {
 		textareaClick( newLi );
 	}
 
+console.log('(6) inside regexPairAdd()');
 	// set the checkbox to true if the new find/replace pair are textareas
 	if( tmpInputs.length == 1 ) {
 		newInput[2].checked = true;
 	}
 
+console.log('(7) inside regexPairAdd()');
 	//
 	newLabel[2].appendChild( newInput[2] );
 	newLabel[2].appendChild( document.createTextNode(' Multi line') );
 	newSpan[2].appendChild( newLabel[2] );
 
+console.log('(8) inside regexPairAdd()');
 	newLi.appendChild( newSpan[2] );
 
+console.log('(9) inside regexPairAdd()');
 	ol.appendChild( newLi );
 
 	if( id == 1 ) {
 		remover.classList.toggle( 'hiding' );
 	}
 
+console.log('(10) inside regexPairAdd()');
 	return false;
 };
 
@@ -267,6 +283,7 @@ var submitReplaceByLine = document.getElementById('replace_new_line');
 
 
 more.onclick = function() {
+console.log('inside "Add" click event');
 	regexPairAdd( );
 	return false;
 };
@@ -299,7 +316,7 @@ submitReplaceByLine.onchange = function() {
 
 
 
-doStuff = function() {
+var doStuff = function() {
 	var wrapper = document.getElementById('regexes');
 	var ol = getOl( wrapper );
 	var LIs = ol.getElementsByTagName('li');
