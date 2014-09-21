@@ -19,7 +19,7 @@ label span , #butt label {
 	font-size: 140%;
 	font-weight: bold;
 }
-.input input {
+.input input , .input textarea {
 	width: 100%;
 	border: 0.1em solid #ddd;
 	border-radius: 0.3em;
@@ -43,11 +43,13 @@ label span , #butt label {
 }
 .regexes li {
 	margin-bottom: 1.75em;
+	margin-left: 1em;
+	padding-left: 0%;
 }
-input.find {
+input.find , textarea.find {
 	background-color: #dfd;
 }
-input.replace {
+input.replace , textarea.replace {
 	background-color: #eef;
 }
 textarea {
@@ -55,6 +57,29 @@ textarea {
 	height: 20em;
 	display:block;
 	margin-right: 1em;
+}
+ol.regexes {
+	padding-left: 0%;
+}
+.inline {
+	margin: 0;
+	padding: 0;
+}
+.inline li {
+	list-style-type: none;
+	display: inline;
+	margin: 0;
+	padding: 0 1em 0 0;
+}
+
+
+.btn.b-left {
+	border-top-left-radius: 1.5em;
+	border-bottom-left-radius: 1.5em;
+}
+.btn.b-right {
+	border-top-right-radius: 1.5em;
+	border-bottom-right-radius: 1.5em;
 }
 
 
@@ -67,6 +92,9 @@ textarea {
 		display: table-cell;
 		width: 20%;
 		font-size:100%;
+	}
+	.has-textarea .input label {
+		vertical-align: top;
 	}
 	.input input {
 		display: table-cell;
