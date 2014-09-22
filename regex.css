@@ -29,7 +29,7 @@ label span , #butt label {
 	padding: 0.3em 0.5em;
 	margin-top: 0.2em;
 }
-.checkbox-check {
+.regexPair .checkbox-check {
 	position: relative;
 	top: -1em;
 }
