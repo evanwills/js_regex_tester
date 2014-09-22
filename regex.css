@@ -10,7 +10,9 @@ label span , #butt label {
 	top: -1000em;
 	left: -1000em;
 }
-
+#input textarea {
+	min-height: 25em;
+}
 .input {
 	top: -1.5em;
 }
