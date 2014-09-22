@@ -13,16 +13,16 @@ label span , #butt label {
 #input textarea {
 	min-height: 25em;
 }
-.input {
+.frInputWrap {
 	top: -1.5em;
 }
-.input label {
+.frInputWrap label {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 140%;
 	font-weight: bold;
 	padding-right: 0.5em;
 }
-.input input , .input textarea {
+.frInputWrap input , .frInputWrap textarea {
 	width: 100%;
 	border: 0.1em solid #ddd;
 	border-radius: 0.3em;
@@ -104,22 +104,22 @@ ol.regexes {
 
 
 @media (max-width: 52em) {
-	.input {
+	.frInputWrap {
 		display: table;
 		width: 100%;
 	}
-	.input label {
+	.frInputWrap label {
 		display: table-cell;
 		width: 20%;
 		font-size:100%;
 	}
-	.has-textarea .input label {
+	.has-textarea .frInputWrap label {
 		vertical-align: top;
 	}
-	.input input {
+	.frInputWrap input {
 		display: table-cell;
 	}
-	.input .hiding {
+	.frInputWrap .hiding {
 		position: static;
 	}
 	body { padding-bottom: 7em; }
