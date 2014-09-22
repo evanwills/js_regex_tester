@@ -18,6 +18,7 @@ label span , #butt label {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 140%;
 	font-weight: bold;
+	padding-right: 0.5em;
 }
 .input input , .input textarea {
 	width: 100%;
