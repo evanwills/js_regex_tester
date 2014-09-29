@@ -10,28 +10,78 @@ label span , #butt label {
 	top: -1000em;
 	left: -1000em;
 }
+#input textarea {
+	min-height: 25em;
+}
+#regexes div {
+	position: relative;
+}
+#regexes div p {
+	display: none;
+	margin-top:1em;
+}
+p.note {
+	text-indent: -3.5em;
+	margin-left: 3.5em;
+	margin-bottom: 2em;
+	line-height: 1em;
+}
 
-.input {
+#regexes div:hover p {
+	display: block;
+}
+
+.frInputWrap {
 	top: -1.5em;
 }
-.input label {
+.frInputWrap label {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 140%;
 	font-weight: bold;
+	padding-right: 0.5em;
 }
-.input input , .input textarea {
+.frInputWrap input , .frInputWrap textarea {
 	width: 100%;
 	border: 0.1em solid #ddd;
 	border-radius: 0.3em;
 	padding: 0.3em 0.5em;
 	margin-top: 0.2em;
+	font-family: monospace;
 }
 .checkbox-check {
 	position: relative;
 	top: -1em;
 }
+.checkbox-check label {
+	font-weight: normal !important;
+}
+.checkbox-check label:first-child {
+	padding-right: 2em;
+}
+.checkbox-check input[type='text'] {
+	font-weight:normal;
+	font-family: monospace;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+}
 
-
+header h1 , header h2 {
+	line-height: 1em;
+	margin: 0%;
+	text-align: center;
+}
+header h1 {
+	padding: 0.5em 0% 0.2em;
+}
+header h2 {
+	font-size: 133%;
+	font-weight: normal;
+	white-space: nowrap;
+}
+fieldset h2 {
+	font-size: 128.6%;
+	font-weight: bold;
+}
 
 .hiding {
 	position: absolute;
@@ -70,6 +120,7 @@ ol.regexes {
 	display: inline;
 	margin: 0;
 	padding: 0 1em 0 0;
+	white-space: nowrap;
 }
 
 
@@ -84,22 +135,48 @@ ol.regexes {
 
 
 @media (max-width: 52em) {
-	.input {
+	.frInputWrap {
 		display: table;
 		width: 100%;
 	}
-	.input label {
+	.frInputWrap label {
 		display: table-cell;
 		width: 20%;
 		font-size:100%;
 	}
-	.has-textarea .input label {
+	.has-textarea .frInputWrap label {
 		vertical-align: top;
 	}
-	.input input {
+	.frInputWrap input {
 		display: table-cell;
 	}
-	.input .hiding {
+	.frInputWrap .hiding {
 		position: static;
+	}
+	body { padding-bottom: 7em; }
+	#butt {
+		position: fixed;
+		bottom: 0%;
+		left: 0%;
+		right: 0%;
+		padding-bottom: 1em;
+		padding-top: 1em;
+		background-color: rgba( 220 , 220 , 220 , 0.7 );
+		text-align: center;
+	}
+	#butt legend { display: none; }
+	#butt ul {
+		text-align: center;
+	}
+	a[rel='sidebar'] {
+		display: none;
+	}
+}
+@media ( max-width: 19em ) {
+	.frInputWrap .hiding {
+		position: absolute;
+	}
+	.frInputWrap input , .frInputWrap textarea {
+		display: block;
 	}
 }
