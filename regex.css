@@ -88,6 +88,7 @@ fieldset h2 {
 	top: -10000em;
 	left: -10000em;
 }
+.remove { display:none !important;}
 .regexes {
 	padding-top: 1em;
 }

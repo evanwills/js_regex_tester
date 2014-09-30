@@ -18,7 +18,7 @@
 			<ul class="nav nav-tabs">
 				<li><a href="#input" data-toggle="tab">Input</a></li>
 				<li class="active"><a href="#regexes" data-toggle="tab" class="active">Regex</a></li>
-				<li><a href="#output" data-toggle="tab" class="hiding" id="output-tab">Output</a></li>
+				<li class="remove"><a href="#output" data-toggle="tab" class="hiding" id="output-tab">Output</a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -84,12 +84,12 @@ but the last line will be empty
 					<div>
 						<label for="add_regex_pair">
 							<button id="add_regex_pair" class="btn btn-info">Add</button>
-							another find/replace pair
+							<span class="hiding">another find/replace pair</span>
 						</label>
 
 						<label for="remove_regex_pair" class="hiding">
 							<button id="remove_regex_pair" class="btn btn-warning">Remove</button>
-							the last find/replace pair
+							<span class="hiding">the last find/replace pair</span>
 						</label>
 						<p>Often it is easier to use multiple simple consecutive regular expressions to effect changes rather than try and do it with a single highly complex (and therefore fragile) regex. Add additional Find/Replace pairs.</p>
 						<p class="note"><strong>NOTE:</strong> Pairs with no pattern in the "Find" field will be ignored.</p>
