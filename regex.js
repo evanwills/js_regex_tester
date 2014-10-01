@@ -32,6 +32,14 @@ function getParent( el , tagname ) {
 		}
 	}
 }
+
+function extractIdIndex( id_ ) {
+	
+	var i_ = id_.length - 1;
+	return id_[i_] / 1;
+}
+
+
 /**
  * @function convertFieldX() converts a field from input to textarea (or vice versa )
  *
@@ -112,20 +120,191 @@ function convertFieldX( fieldIdIndex , fieldType ) {
 				// field into it. Then remove the old field
 				tmpParent = oldField.parentElement;
 				tmpParent.appendChild(newField);
-				tmpParent.removeChild(oldField);
+				tmpPeChild(oldField);
 			}
 		}
 	}
 }
 
 $('document').ready(function(){
-	$('#regexp0 .checkbox-check :text').blur( checkModifiersOk() );
+	$('input.modifiers').blur( function() {
+		var current = false;
+		var hasError = false;
+		$('input.modifiers').each( function() {
+			/**
+			 * @var string modifiers The string value of the
+			 *	modifiers for this regex Find/Replace pair.
+			 */
+			var modifiers = $(this).val();
+
+			/**
+			 * @var string errorMsg If there's a issue with the
+			 *	modifiers this will advise what the issue is.
+			 */
+			var errorMsg = '';
+
+			var newModifiers = '';
+			/**
+			 * @var integer vanilla the number of modifiers that are generic to both JavaScript and PHP PCRE
+			 */
+			var vanilla = 0;
+
+			/**
+			 * @var integer ecma the number of modifiers that are ECMA Script specific
+			 */
+			var ecma = false;
+			var ecmaMs = '';
+
+			/**
+			 * @var integer pcre The number of modifiers that are PHP PCRE specific
+			 */
+			var pcre = false;
+			var pcreMs = '';
+
+			/**
+			 * @var integer xregex The number of modifiers that are XRegExp specific
+			 */
+			var xregex = false;
+			var xregexMs = '';
+
+			var idIndex;
+			var output = 'vanilla';
+			if( modifiers.length > 0 ) {
+				var a = 0;
+				// loop through the modifiers
+				for( a = 0 ; a < modifiers.length ; a += 1 ) {
+					switch(modifiers[a]) {
+						// TODO: work out solution to possible conflict created by
+						//	 's' & 'x' modifiers
+
+						case 'i': // everything uses case insensitive
+						case 'm': // theoretically everything uses [m]ultiline
+							newModifiers += modifiers[a]; // this modifier is OK. add it to the list of keepers
+							break;
+						case 'g': // js only
+						case 'y': // js only
+							ecma = true;
+							ecmaMs += modifiers[a];
+							newModifiers += modifiers[a]; // this modifier is OK. add it to the list of keepers
+							break;
+						case 'n': // XRegExp only
+							xregex = true;
+							xregexMs += modifiers[a];
+
+							newModifiers += modifiers[a]; // this modifier is OK. add it to the list of keepers
+							break;
+						case 's': // XRegExp & PHP PCRE
+						case 'x': // XRegExp & PHP PCRE
+							xregex = true;
+							pcre = true;
+							newModifiers += modifiers[a]; // this modifier is OK. add it to the list of keepers
+							break;
+						case 'e': // PHP PCRE only
+						case 'A': // PHP PCRE only
+						case 'D': // PHP PCRE only
+						case 'S': // PHP PCRE only
+						case 'U': // PHP PCRE only
+						case 'X': // PHP PCRE only
+						case 'J': // PHP PCRE only
+						case 'u': // PHP PCRE only
+							pcre = true;
+							pcreMs += modifiers[a];
+							newModifiers += modifiers[a]; // this modifier is OK. add it to the list of keepers
+							break;
+					}
+				}
+				if( newModifiers != modifiers ) {
+					$(this).val(newModifiers);
+				}
+
+				if( pcre === true && pcreMs.length > 0 ) {
+					if( ( ecma === true && ecmaMs.length > 0 ) || ( xregex === true && xregexMs.length > 0 ) ) {
+						// ecma and pcre conflict we have an error
+						output = false;
+						hasError = true;
+						errorMsg = 'You can\'t use modifiers for both PHP PCRE regular expressions and JavaScript regular expressions.';
+					} else {
+						// looks like you're trying to use PHP PCRE flavoured regexes
+						output = 'pcre';
+					}
+				} else if( xregex === true ) {
+					// OK  using advanced XRegExp modifiers
+					output = 'XRegExp';
+				} else {
+					// just using plain old ecma regexes.
+					output = 'ecma';
+				}
+			}
+
+			if( output != false ) {
+				if( current === false ) {
+					// This is the first time we've got modifiers
+					// so set current to the current regex engine
+					current = output;
+				} else if ( current != output ) {
+					// This set of modifiers is different from the preceeding
+					// modifiers. Lets see what's going on.
+					if( current == 'ecma' && output == 'XRegExp') {
+						// upgrade from vanilla JS regexp to XRegExp
+						current == output;
+//					} else if( current == 'XRegExp' && output == 'ecma') {
+						// nothing to do here
+					} else if( ( current == 'pcre' && ( output == 'ecma' || output == 'XRegExp') ) || ( ( current == 'ecma' || current == 'XRegExp') && output == 'pcre' ) ) {
+						// Bugger!!! We have a conflict between regex engines.
+
+						hasError = true;
+
+						// add an error message to the end of the wrapping <LI>
+						if( output == 'pcre' ) {
+							errorMsg = 'The PHP PCRE modifiers used here conflict with the previous ' + current + ' JavaScript RegExp modifiers.';
+						} else {
+							errorMsg = 'The ' + output + ' modifiers used here conflict with the previous PHP PCRE modifiers.';
+						}
+					}
+
+				}
+			}
+
+			if( errorMsg != '' ) {
+				// add error class to the modifiers input field
+				$(this).addClass('error');
+
+				// add error class to the wrapping <LI>
+				idIndex = extractIdIndex( $(this).attr('id') );
+				$( '#regexp' + idIndex ).addClass('error')
+
+				// add an error message to the end of the wrapping <LI>
+				$( '#regexp' + idIndex ).append( '<p class="error-msg">' + errorMsg + '</p>' );
+				
+			} else {
+				// remove error class to the modifiers input field
+				$(this).removeClass('error');
+
+				// remove error class on the wrapping <LI>
+				idIndex = extractIdIndex( $(this).attr('id') );
+				$( '#regexp' + idIndex ).removeClass('error');
+
+				// remove the error message
+				$( '#regexp' + idIndex + ' .error-msg' ).remove();
+			}
+		});
+
+		if( hasError === true ) {
+			// disable both the "Test" and the "Replace" buttons until this is resolved.
+			$('#submitTest').attr('disabled','disabled');
+			$('#submitReplace').attr('disabled','disabled');
+		} else {
+			// if there was an error but that error has now
+			// been resolved, re-enable the submit buttons
+			$('#submitTest').removeAttr('disabled');
+			$('#submitReplace').removeAttr('disabled');
+		}
+
+	});
 
 	$('#regexp0 .checkbox-check :checkbox').click(function(){
 
-		var idIndex = $(this).attr('id');
-		var i = idIndex.length - 1;
-		idIndex = idIndex[i] / 1;
+		var idIndex = extractIdIndex( $(this).attr('id') );
 
 		if( $(this).is(':checked') === true ) {
 			if( !$('#regexp' + idIndex).hasClass('has-textarea') ) {
@@ -233,6 +412,9 @@ $('document').ready(function(){
 		$('.regexes li:last label span').each( function(){
 			$(this).text(h);
 		});
+
+		// remove previous modifiers
+		$('#modifiers' + g ).val('');		
 
 		// remove the hiding class from the "Remove" button
 		$('label[for=remove_regex_pair]').removeClass('hiding');
