@@ -131,6 +131,13 @@ $('document').ready(function(){
 		var current = false;
 		var hasError = false;
 		$('input.modifiers').each( function() {
+
+			/**
+			 * @var string flavour The regex engine flavour to be
+			 *	used (as identified by modifiers)
+			 */
+			var flavour = 'vanilla';
+
 			/**
 			 * @var string modifiers The string value of the
 			 *	modifiers for this regex Find/Replace pair.
@@ -143,33 +150,98 @@ $('document').ready(function(){
 			 */
 			var errorMsg = '';
 
-			var newModifiers = '';
 			/**
-			 * @var integer vanilla the number of modifiers that are generic to both JavaScript and PHP PCRE
+			 * @var boolean skip Whether or not to skip parsing
+			 *	the modifiers.
+			 *
+			 * If the modifiers are unchanged, then from the last
+			 * time they were checked, there's no point in
+			 * parsing them again.
 			 */
-			var vanilla = 0;
+			var skip = false;
+
+			// Check if there are any modifiers. 
+			// If so, check if anything has changed
+			if( modifiers.length == 0 ) {
+				// the modifiers have been removed
+				$(this).data('regexModifiers',modifiers);
+				// nothing else to do.
+				return true;
+			} else if( $(this).data('regexModifiers') == modifiers ) {
+				// the modifiers have not changed
+
+				flavour = $(this).data('regexFlavour');
+				// don't bother processing the modifiers again
+				skip = true;
+			}
+
 
 			/**
-			 * @var integer ecma the number of modifiers that are ECMA Script specific
+			 * @var string newModifiers The sanitised list of
+			 *	modifiers. As each modifier is processed,
+			 *	invalid modifiers are stripped. newModifiers
+			 *	holds only the valid modifiers
+			 */
+			var newModifiers = '';
+
+
+			/**
+			 * @var boolean ecma Whether or not the Modifiers
+			 *	are vanilla javascript only
 			 */
 			var ecma = false;
-			var ecmaMs = '';
 
 			/**
-			 * @var integer pcre The number of modifiers that are PHP PCRE specific
+			 * @var string ecmaMs The javascript only modifiers
+			 *	('g' & 'y') that may be present in the list
+			 *	of user supplied modifiers
+			 */
+			var ecmaMs = '';
+
+
+			/**
+			 * @var boolean pcre Whether or not the modifiers
+			 *	are PHP PCRE regex only
 			 */
 			var pcre = false;
+
+			/**
+			 * @var string ecmaMs The PHP PCRE only modifiers
+			 *	('e', 'A', 'D', 'S', 'U', 'X', 'J' & 'u')
+			 *	that may be present in the list of user
+			 *	supplied modifiers
+			 *
+			 * NOTE: modifiers 's' & 'x' are available to both
+			 *	 PHP PCRE and XRegExp, so are not included
+			 *	 here
+			 */
 			var pcreMs = '';
 
 			/**
-			 * @var integer xregex The number of modifiers that are XRegExp specific
+			 * @var boolean xregex Whether or not the modifiers
+			 *	are XRegExp specific
 			 */
 			var xregex = false;
+
+			/**
+			 * @var string xregexMs The XRegExp only modifier
+			 *	('n') that may be present in the list of
+			 *	user supplied modifiers
+			 *
+			 * NOTE: modifiers 's' & 'x' are available to both
+			 *	 PHP PCRE and XRegExp, so are not included
+			 *	 here
+			 */
 			var xregexMs = '';
 
-			var idIndex;
-			var output = 'vanilla';
-			if( modifiers.length > 0 ) {
+
+			/**
+			 * @var integer idIndex The index value used to suffix
+			 *	all IDs in this regex Find/Replace block
+			 */
+			var idIndex = extractIdIndex( $(this).attr('id') );
+
+			if( skip === false ) {
 				var a = 0;
 				// loop through the modifiers
 				for( a = 0 ; a < modifiers.length ; a += 1 ) {
@@ -220,62 +292,73 @@ $('document').ready(function(){
 				if( pcre === true && pcreMs.length > 0 ) {
 					if( ( ecma === true && ecmaMs.length > 0 ) || ( xregex === true && xregexMs.length > 0 ) ) {
 						// ecma and pcre conflict we have an error
-						output = false;
+						flavour = false;
 						hasError = true;
 						errorMsg = 'You can\'t use modifiers for both PHP PCRE regular expressions and JavaScript regular expressions.';
 					} else {
 						// looks like you're trying to use PHP PCRE flavoured regexes
-						output = 'pcre';
+						flavour = 'pcre';
 					}
 				} else if( xregex === true ) {
 					// OK  using advanced XRegExp modifiers
-					output = 'XRegExp';
+					flavour = 'XRegExp';
 				} else {
 					// just using plain old ecma regexes.
-					output = 'ecma';
+					flavour = 'ecma';
 				}
 			}
 
-			if( output != false ) {
+
+			if( flavour != false ) {
 				if( current === false ) {
 					// This is the first time we've got modifiers
 					// so set current to the current regex engine
-					current = output;
-				} else if ( current != output ) {
+					current = flavour;
+				} else if ( current != flavour ) {
 					// This set of modifiers is different from the preceeding
 					// modifiers. Lets see what's going on.
-					if( current == 'ecma' && output == 'XRegExp') {
+					if( current == 'ecma' && flavour == 'XRegExp') {
 						// upgrade from vanilla JS regexp to XRegExp
-						current == output;
+						current == flavour;
 //					} else if( current == 'XRegExp' && output == 'ecma') {
 						// nothing to do here
-					} else if( ( current == 'pcre' && ( output == 'ecma' || output == 'XRegExp') ) || ( ( current == 'ecma' || current == 'XRegExp') && output == 'pcre' ) ) {
+					} else if( ( current == 'pcre' && ( flavour == 'ecma' || flavour == 'XRegExp') ) || ( ( current == 'ecma' || current == 'XRegExp') && flavour == 'pcre' ) ) {
 						// Bugger!!! We have a conflict between regex engines.
 
 						hasError = true;
 
 						// add an error message to the end of the wrapping <LI>
-						if( output == 'pcre' ) {
+						if( flavour == 'pcre' ) {
 							errorMsg = 'The PHP PCRE modifiers used here conflict with the previous ' + current + ' JavaScript RegExp modifiers.';
 						} else {
-							errorMsg = 'The ' + output + ' modifiers used here conflict with the previous PHP PCRE modifiers.';
+							errorMsg = 'The ' + flavour + ' modifiers used here conflict with the previous PHP PCRE modifiers.';
 						}
 					}
-
 				}
 			}
+
+			// store the regex engine flavour to speed up future retesting
+			$(this).data('regexFlavour',flavour);
 
 			if( errorMsg != '' ) {
 				// add error class to the modifiers input field
 				$(this).addClass('error');
 
 				// add error class to the wrapping <LI>
-				idIndex = extractIdIndex( $(this).attr('id') );
 				$( '#regexp' + idIndex ).addClass('error')
 
-				// add an error message to the end of the wrapping <LI>
-				$( '#regexp' + idIndex ).append( '<p class="error-msg">' + errorMsg + '</p>' );
-				
+				if( $( '#regexp' + idIndex + ' .error-msg' ) ) {
+					if(  $(this).data('errorMsg') != errorMsg ) {
+						// replace the existing error message
+						$( '#regexp' + idIndex + ' .error-msg' ).text(errorMsg);
+					}
+				} else {
+					// add an error message to the end of the wrapping <LI>
+					$( '#regexp' + idIndex ).append( '<p class="error-msg">' + errorMsg + '</p>' );
+				}
+
+				// save the error message for later
+				$(this).data('errorMsg',errorMsg);	
 			} else {
 				// remove error class to the modifiers input field
 				$(this).removeClass('error');
@@ -286,6 +369,10 @@ $('document').ready(function(){
 
 				// remove the error message
 				$( '#regexp' + idIndex + ' .error-msg' ).remove();
+
+				// All the modifiers are good. Store them for later comparison
+				$(this).data( 'regexModifiers' , newModifiers );
+				$(this).data( 'errorMsg' , '' );
 			}
 		});
 
@@ -304,15 +391,23 @@ $('document').ready(function(){
 
 	$('#regexp0 .checkbox-check :checkbox').click(function(){
 
+		/**
+		 * @var integer idIndex The index value used to suffix
+		 *	all IDs in this regex Find/Replace block
+		 */
 		var idIndex = extractIdIndex( $(this).attr('id') );
+
 
 		if( $(this).is(':checked') === true ) {
 			if( !$('#regexp' + idIndex).hasClass('has-textarea') ) {
 				$('#regexp' + idIndex).addClass('has-textarea');
 			}
+			// convert the field into a textarea
 			convertFieldX( idIndex , 'textarea' );
 		} else {
 			$('#regexp' + idIndex).removeClass('has-textarea');
+
+			// convert the field into an input text field
 			convertFieldX( idIndex , 'input' );
 		}
 
