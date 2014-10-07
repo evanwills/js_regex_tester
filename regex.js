@@ -9,6 +9,24 @@ function makeMultiLine() {
 }
 
 function testRegex() {
+	var sample = $('#sample').val();
+	if( $('#ws_trim').is(':checked') ) {
+		sample = sample.trim();
+	}
+
+	$('.regexes li').each(function(index){
+		var find = $('#find'+index).val();
+		if( find != '' ) {
+			var replace = $('#replace'+index).val();
+			var modifiers = $('#modifiers'+index).val();
+
+			try {
+				var reg = new XRegExp( find , modifiers );
+			} catch(e) {
+				console.log('XRegExp error: ' + e.message );
+			}
+		}
+	})
 
 }
 
