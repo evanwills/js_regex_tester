@@ -8,8 +8,9 @@ function makeMultiLine() {
 
 }
 
+
 function testRegex() {
-	var sample = $('#sample').val();
+	var sample = $('#sample').val();console.log(sample);
 	if( $('#ws_trim').is(':checked') ) {
 		sample = sample.trim();
 	}
@@ -138,7 +139,7 @@ function convertFieldX( fieldIdIndex , fieldType ) {
 				// field into it. Then remove the old field
 				tmpParent = oldField.parentElement;
 				tmpParent.appendChild(newField);
-				tmpPeChild(oldField);
+				tmpParent.removeChild(oldField);
 			}
 		}
 	}
@@ -431,16 +432,20 @@ $('document').ready(function(){
 
 	});
 
-	$('#submitTest').click(function(){
-		$('#sample').testRegex();
+/*
+	$('#submitTest').click(function(e){
+		e.preventDefault();
+		testRegex();
 		setActiveTab(2);
 		return false;
 	});
 
-	$('#submitReplace').click(function(){
-		$('#sample').testRegex().showOutput();
+	$('#submitReplace').click(function(e){
+		e.preventDefault();
+		testRegex().showOutput();
 		return false;
 	});
+*/
 
 	/**
 	 * @function add_regex_pair() creates a new regex Find/Replace pair.
@@ -550,5 +555,19 @@ $('document').ready(function(){
 			}
 		}
 		return false;
+	});
+
+	$('#ws_trim').on('change',function(e){
+		if( $(this).is(':checked') === true ) {
+			$('#ws_trim_pos_before').removeAttr('disabled');
+			$('#ws_trim_pos_after').removeAttr('disabled');
+			$('#ws_trim_pos_before').parent().removeClass('disabled');
+			$('#ws_trim_pos_after').parent().removeClass('disabled');
+		} else {
+			$('#ws_trim_pos_before').attr('disabled','disabled');
+			$('#ws_trim_pos_after').attr('disabled','disabled');
+			$('#ws_trim_pos_before').parent().addClass('disabled');
+			$('#ws_trim_pos_after').parent().addClass('disabled');
+		}
 	});
 });
