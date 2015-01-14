@@ -1,3 +1,3 @@
 <?php
 
-require_once('regex_controller.inc.php');
+require_once('regex_check_controller.inc.php');
