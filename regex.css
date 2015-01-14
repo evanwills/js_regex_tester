@@ -147,6 +147,189 @@ ol.regexes {
 	border-bottom-right-radius: 1.5em;
 }
 
+
+dl.table-def
+{
+	line-height: 1.2em
+}
+dl.table-def dt { margin-top:  0%; margin-right: 0%; margin-bottom: -1.4em; margin-left: 0%; font-weight: bold; }
+dl.table-def dd { padding-top: 0%; padding-right: 0%; padding-bottom: 0%; padding-left: 1em; margin-top: 0%; margin-right: 0%; margin-bottom: 0.5em; }
+dl.table-def.close dd { margin-bottom: 0%; }
+
+dl.table-def.X2 dt { width: 2em; } dl.table-def.X2 dd { margin-left: 2em; }
+dl.table-def.X3 dt { width: 3em; } dl.table-def.X3 dd { margin-left: 3em; }
+dl.table-def.X4 dt { width: 4em; } dl.table-def.X4 dd { margin-left: 4em; }
+dl.table-def.X5 dt { width: 5em; } dl.table-def.X5 dd { margin-left: 5em; }
+dl.table-def.X6 dt { width: 6em; } dl.table-def.X6 dd { margin-left: 6em; }
+dl.table-def.X7 dt { width: 7em; } dl.table-def.X7 dd { margin-left: 7em; }
+dl.table-def.X8 dt { width: 8em; } dl.table-def.X8 dd { margin-left: 8em; }
+
+section#results
+{
+	position: relative;
+	font-size: 90%;
+	padding: 0.5em 0%;
+}
+section#results h2
+{
+	padding: 0.5em 1em 0.5em 0.5em;
+	margin: 0%;
+	color: rgb( 0 , 75  , 0 );
+}
+section#results ol
+{
+	padding: 1em;
+}
+/*
+section#results:hover
+{
+	z-index: 10;
+	background-color: rgb( 0 , 75  , 0 );
+}
+section#results:hover h1
+{
+	color: #fff;
+	padding: 0.5em 1em;
+}
+
+section#results:hover ol
+{
+	display: block;
+}
+*/
+.results ol li
+{
+	border-top: 0.1em solid #000;
+	padding-top: 1.5em;
+	padding-bottom: 0.5em;
+	list-style-type: lower-alpha;
+}
+.results ol li:nth-child(2n,1)
+{
+	background-color: rgba( 200 , 200 , 255 , 0.90 );
+}
+
+.results ol li:first-of-type
+{
+	border-top: none;
+	background-color: transparent;
+	margin-top: 1em;
+}
+.results ol li ol
+{
+	position: static;
+	background-color: transparent;
+	padding: 0%;
+	border: none;
+	margin-top: -1em;
+	max-height: none;
+	-webkit-border-bottom-left-radius: 0%;
+	 -khtml-border-bottom-left-radius: 0%;
+	   -moz-border-bottom-left-radius: 0%;
+	    -ms-border-bottom-left-radius: 0%;
+	     -o-border-bottom-left-radius: 0%;
+		border-bottom-left-radius: 0%;
+	-webkit-border-bottom-right-radius: 0%;
+	 -khtml-border-bottom-right-radius: 0%;
+	   -moz-border-bottom-right-radius: 0%;
+	    -ms-border-bottom-right-radius: 0%;
+	     -o-border-bottom-right-radius: 0%;
+		border-bottom-right-radius: 0%;
+	-webkit-box-shadow: none;
+	 -kthml-box-shadow: none;
+	   -moz-box-shadow: none;
+	    -ms-box-shadow: none;
+	     -o-box-shadow: none;
+		box-shadow: none;
+}
+ol.multi-sample li
+{
+	list-style-type: lower-alpha;
+	border: none;
+	padding-top: 0.5em;
+	padding-bottom: 0%;
+	border-top: 0.1em dashed #888;
+}
+ ol.single-sample li
+,.multi-sample ol li
+{
+	list-style-type: decimal;
+	border: none;
+	padding-top: 0.5em;
+	padding-bottom: 0%;
+	border-top: 0.1em dotted #888;
+}
+ ol.single-sample li:first-of-type
+,.multi-sample ol li:first-of-type
+{
+	padding-top: 0em;
+	margin-top: 0%;
+	border-top: none;
+}
+
+
+dd.matched ol li
+{
+	list-style-type: lower-roman;
+	margin: 0% 0% 0% 2em;
+	padding: 0%;
+	border-top: none;
+}
+dd.matched ol li ol
+{
+	margin-top: 0%;
+	padding-bottom: 0.5em;
+}
+dd.matched ol.matched-parts li
+{
+	list-style-type: decimal;
+	margin-top: 0%;
+	margin-bottom: 0%;
+	padding-top: 0%;
+	padding-bottom: 0%;
+}
+
+dd.matched ol.matched-parts.named
+{
+	counter-reset: mblock;
+}
+dd.matched ol.matched-parts.named li
+{
+	list-style: none;
+	display: block;
+	margin-left: 0%;
+	padding-left: 0%;
+	counter-increment: mblock;
+}
+dd.matched ol.matched-parts.named li
+{
+	display: table-row;
+}
+dd.matched ol.matched-parts.named li:before
+{
+	content: counter(mblock) '. ';
+	padding-right: 0.5em;
+}
+dd.matched ol.matched-parts.named li span.name
+{
+	font-family: monospace;
+	font-weight: bold;
+	padding-right: 0.5em;
+	display: table-cell;
+}
+dd.matched ol.matched-parts.named li span.value
+{
+	display: table-cell;
+}
+dd.matched ol.matched-parts.named li span.value:before
+{
+	content: ': ';
+}
+
+.regex-pattern , .error_high {
+	font-family: monospace;
+}
+
 dt.dud, dt.dud + dd
 {
 	color: #aaa;
@@ -172,6 +355,18 @@ span.error { background-color: #f00; color: #ff0; }
 	color: #aaa;
 	font-size: 0.6rem;
 	font-style: italic;
+}
+span.whole
+{
+	font-size: 120%;
+
+}
+span.whole:after
+{
+	content: ' (whole string)';
+	padding-left: 0.5em;
+	color: #55b;
+	font-size: 83.3%;
 }
 
 @media (max-width: 52em) {
