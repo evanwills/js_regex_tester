@@ -89,13 +89,14 @@ class regex_check_parent_view_html extends regex_check_parent_view
 		if( $this->model->get_prop('ws_trim') )
 		{
 			$ws_trim_cb = ' checked="checked"';
-			$ws_trim_true_label_cls = $ws_trim_false_label_cls = '';
+			$ws_trim_label_cls = '';
 		}
 		else
 		{
 			$ws_trim_cb = '';
-			$ws_trim_true = $ws_trim_false .= ' disabled="disabled"';
-			$ws_trim_true_label_cls = $ws_trim_false_label_cls = 'disabled';
+			$ws_trim_true .= ' disabled="disabled"';
+			$ws_trim_false .= ' disabled="disabled"';
+			$ws_trim_label_cls = 'disabled';
 		}
 
 		if( $this->model->get_prop('split_sample') )
@@ -148,15 +149,12 @@ class regex_check_parent_view_html extends regex_check_parent_view
 			,'{{ACTIVE_REGEX_CLS}}'			//  [9] $active_regex_cls
 			,'{{SPLIT_SAMPLE_CB}}'			// [10]$split_sample_cb
 			,'{{SPLIT_DELIM}}'				// [11] $split_delim
-			,'{{SPLIT_DELIM_DISABLED}}'		// [12] $split_delim_label_cls
-			,'{{SPLIT_DELIM_LABEL_CLS}}'	// [13] $split_delim_disabled
+			,'{{SPLIT_DELIM_LABEL_CLS}}'	// [12] $split_delim_disabled
+			,'{{SPLIT_DELIM_DISABLED}}'		// [13] $split_delim_label_cls
 			,'{{WS_TRIM_CB}}'				// [14] $ws_trim_cb
-			,'{{WS_TRIM_TRUE}}'				// [15] $ws_trim_true
-			,'{{WS_TRIM_TRUE_DISABLED}}'	// [16] $ws_trim_true_disabled
-			,'{{WS_TRIM_TRUE_LABEL_CLS}}'	// [17] $ws_trim_true_label_cls
-			,'{{WS_TRIM_FALSE}}'			// [18] $ws_trim_false
-			,'{{WS_TRIM_FALSE_DISABLED}}'	// [19] $ws_trim_false_label_cls
-			,'{{WS_TRIM_FALSE_LABEL_CLS}}'	// [20] $ws_trim_false_disabled
+			,'{{WS_TRIM_LABEL_CLS}}'		// [15] $ws_trim_true_label_cls
+			,'{{WS_TRIM_TRUE}}'				// [16] $ws_trim_true
+			,'{{WS_TRIM_FALSE}}'			// [17] $ws_trim_false
 		);
 
 		$replace = array(
@@ -175,12 +173,9 @@ class regex_check_parent_view_html extends regex_check_parent_view
 			,$split_delim_label_cls		// [12] SPLIT_DELIM_DISABLED
 			,$split_delim_disabled		// [13] SPLIT_DELIM_LABEL_CLS
 			,$ws_trim_cb				// [14] WS_TRIM_CB
+			,$ws_trim_label_cls			// [16] WS_TRIM_TRUE_LABEL_CLS
 			,$ws_trim_true				// [15] WS_TRIM_TRUE
-			,$ws_trim_true_disabled		// [16] WS_TRIM_TRUE_DISABLED
-			,$ws_trim_true_label_cls	// [17] WS_TRIM_TRUE_LABEL_CLS
-			,$ws_trim_false				// [18] WS_TRIM_FALSE
-			,$ws_trim_false_label_cls	// [19] WS_TRIM_FALSE_DISABLED
-			,$ws_trim_false_disabled	// [20] WS_TRIM_FALSE_LABEL_CLS
+			,$ws_trim_false				// [17] WS_TRIM_FALSE
 		);
 
 		return str_replace( $find , $replace , file_get_contents('regex_check_template.html') );

@@ -32,14 +32,14 @@
 							</label>
 						</li>
 						<li>
-							<label class="{{WS_TRIM_FALSE_LABEL_CLS}}">
+							<label class="{{WS_TRIM_LABEL_CLS}}">
 								<input type="radio" name="ws_action" id="ws_trim_pos_before" value="true" tabindex="20" {{WS_TRIM_TRUE}}/>
 								<span>Trim white space from sample</span> before processing
 							</label>
 							or
 						</li>
 						<li>
-							<label class="{{WS_TRIM_FALSE_LABEL_CLS}}">
+							<label class="{{WS_TRIM_LABEL_CLS}}">
 								<input type="radio" name="ws_action" id="ws_trim_pos_after" value="false" checked="checked" tabindex="21" {{WS_TRIM_FALSE}}/>
 								<span>Trim white space from sample</span> after processing
 							</label>
@@ -54,8 +54,8 @@
 								Split the sample into pieces
 							</label>
 						</li>
-						<li>
-							<label for="split_delim" class="{{SPLIT_DELIM_LABEL_CLS}}">
+						<li class="{{SPLIT_DELIM_LABEL_CLS}}">
+							<label for="split_delim">
 								Character to split the sample with
 							</label>
 							<input type="text" name="split_delim" id="split_delim" value="{{SPLIT_DELIM}}" maxlength="2" size="3" tabindex="23" {{SPLIT_DELIM_DISABLED}}/>
