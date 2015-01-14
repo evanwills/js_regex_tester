@@ -73,7 +73,7 @@ li.bad-regex {
 	padding-left: 0.2em;
 	padding-right: 0.2em;
 }
-label.disabled {
+label.disabled , li.disabled label {
 	font-weight: normal;
 	color: #ccc;
 }
