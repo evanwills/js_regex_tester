@@ -45,7 +45,7 @@ class regex_check_child_view_html extends regex_check_child_view
 		if( $model->get_multiline() )
 		{
 			$find = '<textarea name="regex['.$a.'][find]" id="find'.$a.'" class="find form-control" placeholder="Regex pattern '.$b.'" '.$required.'/>'.$model->get_find().'</textarea>';
-			$replace = '<textarea name="regex['.$a.'][replace]" id="replace'.$a.'" class="replace form-control" placeholder="Replacement string '.$b.'" '.$required.'/>'.$this->get_replace().'</textarea>';
+			$replace = '<textarea name="regex['.$a.'][replace]" id="replace'.$a.'" class="replace form-control" placeholder="Replacement string '.$b.'" '.$required.'/>'.$model->get_replace().'</textarea>';
 			$textareaClass = ' has-textarea';
 		}
 		else
@@ -57,9 +57,8 @@ class regex_check_child_view_html extends regex_check_child_view
 
 		if( !$model->is_regex_valid() )
 		{
-debug($model->is_regex_valid());
-			$tmp = $this->regex->get_errors();
-			$error = "\n\t\t\t\t\t\t\t\t<p>".str_replace('preg_match() [function.preg-match.html]: ','',$tmp['error_message'])."</p>\n\t\t\t\t\t\t\t\t<p>{$tmp['error_highlight']}</p>\n";
+			$tmp = $model->get_errors();
+			$error = "\n\t\t\t\t\t\t\t\t<p>".str_replace('preg_match() [function.preg-match.html]: ','',$tmp['error_message'])."</p>\n\t\t\t\t\t\t\t\t<p class=\"error_high\">{$tmp['error_highlight']}</p>\n";
 			$error_class = ' bad-regex';
 			unset($tmp);
 		}
@@ -67,6 +66,11 @@ debug($model->is_regex_valid());
 		{
 			$error = '';
 			$error_class = '';
+		}
+		$checkbox_state = '';
+		if( $model->get_multiline() === true )
+		{
+			$checkbox_state = ' checked="checked"';
 		}
 
 		return '
@@ -87,7 +91,7 @@ debug($model->is_regex_valid());
 									Pattern modifiers
 								</label>
 								<label for="makeTextarea'.$a.'">
-									<input type="checkbox" name="regex['.$a.'][makeTextarea]" id="makeTextarea'.$a.'" value="textarea" title="Make Find '.$b.' and Replace '.$b.' multi line" '.$model->get_multiline(true).'/>
+									<input type="checkbox" name="regex['.$a.'][makeTextarea]" id="makeTextarea'.$a.'" value="textarea" title="Make Find '.$b.' and Replace '.$b.' multi line" '.$checkbox_state.'/>
 									Multi line
 								</label>
 							</span>
@@ -95,77 +99,6 @@ debug($model->is_regex_valid());
 ';
 	}
 
-/*
-	public function get_regex_report( &$sample )
-	{
-		$results = $this->regex->report($sample);
-		$sample = $this->regex->get_output($sample);
-debug($results);
-		$contents = '';
-		$error_class = '';
-		if( !$this->regex->is_valid() )
-		{
-			$error_class = ' class"has-error"';
-			$contents = '
-								<p>'.$results['error_message'].'</p>
-								<p>'.$results['error_highlighted'].'</p>
-			';
-		}
-		else
-		{
-			$contents .= '
-								<dl>
-									<dt>Count</dt>
-										<dd>'.$results['count'].'</dd>
-									<dt>Seconds</dt>
-										<dd>'.$results['time'].'</dd>
-								</dl>
-								<ol>';
-			for( $a = 0 ; $a < count($results['output']) ; $a += 1 )
-			{
-				$contents .= '
-									<li>
-										<dl>
-											<dt>Matched:</dt>
-												<dd>'.$results['output'][$a][0].'</dd>';
-				$cont = true;
-				foreach( $results['output'][$a] as $key => $value )
-				{
-					if( $cont === true )
-					{
-						$cont = false;
-						continue;
-					}
-					if( is_string($key) )
-					{
-						$cont = true;
-					}
-					$contents .= '
-											<dt>'.$key.'</dt>
-												<dd>'.$value.'</dd>';
-				}
-				$contents .= '
-										</dl>
-									</li>';
-
-			}
-
-		}
-
-		$output = '
-						<li>
-							<article'.$error_class.'>
-								<header>
-									<h1><pre>'.htmlentities($results['regex']).'</pre></h1>
-									<h2><pre>'.htmlentities($results['replace']).'</pre></h2>
-								</header>
-								'.$contents.'
-							</article>
-						</li>
-';
-		return $output;
-	}
-*/
 
 /**
  * @method format_report() formats information generated regex::report()
@@ -179,16 +112,44 @@ debug($results);
  */
 	public function format_report( regex_check_child_model $model )
 	{
+		$output = '';
+
+		$report = $model->get_report();
+
+		if( empty($report) )
+		{
+			return $output;
+		}
+
+		for( $a = 0 ; $a < count($report) ; $a += 1 )
+		{
+			$output .= $this->format_report_item( $report[$a] );
+		}
+		return $output;
+	}
+
+/**
+ * @method format_report() formats information generated regex::report()
+ *	   and any feedback from adding/updating/deleting an archive
+ *
+ * @param array $report multi dimensional associative array containing
+ *	  all info on regex processed
+ *
+ * @return string formatted contents of report (including archiver
+ *	   feedback)
+ */
+	protected function format_report_item( $report )
+	{
 		$dud_class = '';
 		$error_classes = array();
 		$error_class = '';
 		$output = '';
 
-		$report = $model->get_report();
-debug($report);
-		if( empty($report) )
+		if( $report['sample'] != '' )
 		{
-			return $output;
+			$output .= '
+						<dt>Sample:</dt>
+							<dd class="sample">'.$this->show_space(htmlspecialchars($report['sample'])).'</dd>';
 		}
 
 		if( $report['time'] == -1 )
@@ -217,7 +178,7 @@ debug($report);
 			$error_classes[] = 'regex_error';
 			$output .= "
 						<dt>Errors:</dt>
-							<dd class=\"error_msg\">{$report['error_message']}</dd>
+							<dd class=\"error_msg\">".str_replace('preg_match() [function.preg-match.html]: ','',$report['error_message'])."</dd>
 							<dd class=\"error_high\">{$report['error_highlight']}</dd>";
 		}
 		if( isset($report['output']) && is_array($report['output']) && !empty($report['output']) )
@@ -256,9 +217,7 @@ debug($report);
 				<article'.$error_class.'>
 					<dl class="table-def X4">
 						<dt>Regex:</dt>
-							<dd>'.htmlspecialchars($report['regex']).'</dd>
-						<dt>Sample:</dt>
-							<dd>'.$this->show_space(htmlspecialchars($report['sample'])).'</dd>'.'
+							<dd class="regex-pattern">'.htmlspecialchars($report['regex']).'</dd>'.'
 '.$output.'
 					</dl>
 				</article>
