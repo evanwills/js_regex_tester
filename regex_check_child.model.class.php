@@ -62,15 +62,9 @@ class regex_check_child_model
 
 
 
-	public function get_multiline( $checkbox_state = false)
+	public function get_multiline()
 	{
-		if( $checkbox_state !== true )
-		{
-			return $this->multiline;
-		}
-		{
-			return 'checked="checked" ';
-		}
+		return $this->multiline;
 	}
 
 	public function is_regex_valid()
@@ -106,12 +100,25 @@ class regex_check_child_model
 
 	public function process( $sample )
 	{
-		$this->report = $this->regex->report($sample);
-		return $this->regex->get_output($sample);
+		if( is_array($sample) )
+		{
+			for( $a = 0 ; $a < count($sample) ; $a += 1 )
+			{
+				$this->report[] = $this->regex->report($sample[$a]);
+				$sample[$a] = $this->regex->get_output($sample[$a]);
+			}
+			return $sample;
+		}
+		else
+		{
+			$this->report[] = $this->regex->report($sample);
+			return $this->regex->get_output($sample);
+		}
 	}
 
 	public function get_errors()
 	{
+		return array_merge($this->erorrs,$this->regex->get_errors());
 
 	}
 
