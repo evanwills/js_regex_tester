@@ -14,56 +14,58 @@
 		</header>
 		<form id="regex" method="post" action="{{REQUEST_URI}}">
 			<ul class="nav nav-tabs">
-				<li><a href="#input" data-toggle="tab">Input</a></li>
-				<li class="active"><a href="#regexes" data-toggle="tab" class="active">Regex</a></li>
+				<li{{ACTIVE_SAMPLE_CLS}}><a href="#input" data-toggle="tab">Input</a></li>
+				<li{{ACTIVE_REGEX_CLS}}><a href="#regexes" data-toggle="tab">Regex</a></li>
 {{EXTRA_TABS}}
 			</ul>
 
 			<div class="tab-content">
-				<fieldset id="input" class="tab-pane fade">
+				<fieldset id="input" class="tab-pane fade{{ACTIVE_SAMPLE}}">
 					<legend>Sample</legend>
 					<textarea id="sample" name="sample" class="form-control">{{SAMPLE}}</textarea>
 					<h2>Clean white space options</h2>
 					<ul class="inline">
 						<li>
 							<label>
-								<input type="checkbox" name="ws_trim" id="ws_trim" value="true" tabindex="19" />
+								<input type="checkbox" name="ws_trim" id="ws_trim" value="true" tabindex="19" {{WS_TRIM_CB}}/>
 								Trim white space from sample
 							</label>
 						</li>
 						<li>
-							<label class="disabled">
-								<input type="radio" name="ws_action" id="ws_trim_pos_before" value="true" tabindex="20" disabled="disabled" />
+							<label class="{{WS_TRIM_FALSE_LABEL_CLS}}">
+								<input type="radio" name="ws_action" id="ws_trim_pos_before" value="true" tabindex="20" {{WS_TRIM_TRUE}}/>
 								<span>Trim white space from sample</span> before processing
 							</label>
 							or
 						</li>
 						<li>
-							<label class="disabled">
-								<input type="radio" name="ws_action" id="ws_trim_pos_after" value="false" checked="checked" tabindex="21" disabled="disabled" />
+							<label class="{{WS_TRIM_FALSE_LABEL_CLS}}">
+								<input type="radio" name="ws_action" id="ws_trim_pos_after" value="false" checked="checked" tabindex="21" {{WS_TRIM_FALSE}}/>
 								<span>Trim white space from sample</span> after processing
 							</label>
 						</li>
 					</ul>
+
 					<h2>Split sample</h2>
 					<ul class="inline">
 						<li>
 							<label>
-								<input type="checkbox" name="split_sample" id="split_sample" value="true" tabindex="22" />
+								<input type="checkbox" name="split_sample" id="split_sample" value="true" tabindex="22" {{SPLIT_SAMPLE_CB}}/>
 								Split the sample into pieces
 							</label>
 						</li>
 						<li>
-							<label for="split_delim" class="disabled">
+							<label for="split_delim" class="{{SPLIT_DELIM_LABEL_CLS}}">
 								Character to split the sample with
 							</label>
-							<input type="text" name="split_delim" id="split_delim" value="\n" maxlength="2" size="3" tabindex="23" disabled="disabled" />
+							<input type="text" name="split_delim" id="split_delim" value="{{SPLIT_DELIM}}" maxlength="2" size="3" tabindex="23" {{SPLIT_DELIM_DISABLED}}/>
 						</li>
 					</ul>
+
 				</fieldset>
 
 
-				<fieldset id="regexes" class="tab-pane fade in active">
+				<fieldset id="regexes" class="tab-pane fade in{{ACTIVE_REGEX}}">
 					<legend>Regular Expressions</legend>
 					<p class="note"><strong>Note:</strong> <span class="warning">Do not</span> use opening and closing delimiters. If regexes are sent to the server, back ticks (`) will automatically inserted as opening and closing delimiters.</p>
 					<ol class="regexes">
