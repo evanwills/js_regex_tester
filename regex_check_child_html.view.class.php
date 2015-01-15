@@ -44,14 +44,14 @@ class regex_check_child_view_html extends regex_check_child_view
 
 		if( $model->get_multiline() )
 		{
-			$find = '<textarea name="regex['.$a.'][find]" id="find'.$a.'" class="find form-control" placeholder="Regex pattern '.$b.'" '.$required.'/>'.$model->get_find().'</textarea>';
-			$replace = '<textarea name="regex['.$a.'][replace]" id="replace'.$a.'" class="replace form-control" placeholder="Replacement string '.$b.'" />'.$model->get_replace().'</textarea>';
+			$find = '<textarea name="regex['.$a.'][find]" id="find'.$a.'" class="find form-control" placeholder="Regex pattern '.$b.'" '.$required.'/>'.htmlspecialchars($model->get_find()).'</textarea>';
+			$replace = '<textarea name="regex['.$a.'][replace]" id="replace'.$a.'" class="replace form-control" placeholder="Replacement string '.$b.'" />'.htmlspecialchars($model->get_replace()).'</textarea>';
 			$textareaClass = ' has-textarea';
 		}
 		else
 		{
-			$find = '<input type="text" name="regex['.$a.'][find]" id="find'.$a.'" value="'.$model->get_find().'" class="find form-control" placeholder="Regex pattern '.$b.'" '.$required.'/>';
-			$replace = '<input type="text" name="regex['.$a.'][replace]" id="replace'.$a.'" value="'.$model->get_replace().'" class="replace form-control" placeholder="Replacement string '.$b.'" />';
+			$find = '<input type="text" name="regex['.$a.'][find]" id="find'.$a.'" value="'.htmlspecialchars($model->get_find()).'" class="find form-control" placeholder="Regex pattern '.$b.'" '.$required.'/>';
+			$replace = '<input type="text" name="regex['.$a.'][replace]" id="replace'.$a.'" value="'.htmlspecialchars($model->get_replace()).'" class="replace form-control" placeholder="Replacement string '.$b.'" />';
 			$textareaClass = '';
 		}
 
