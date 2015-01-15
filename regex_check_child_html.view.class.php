@@ -45,13 +45,13 @@ class regex_check_child_view_html extends regex_check_child_view
 		if( $model->get_multiline() )
 		{
 			$find = '<textarea name="regex['.$a.'][find]" id="find'.$a.'" class="find form-control" placeholder="Regex pattern '.$b.'" '.$required.'/>'.$model->get_find().'</textarea>';
-			$replace = '<textarea name="regex['.$a.'][replace]" id="replace'.$a.'" class="replace form-control" placeholder="Replacement string '.$b.'" '.$required.'/>'.$model->get_replace().'</textarea>';
+			$replace = '<textarea name="regex['.$a.'][replace]" id="replace'.$a.'" class="replace form-control" placeholder="Replacement string '.$b.'" />'.$model->get_replace().'</textarea>';
 			$textareaClass = ' has-textarea';
 		}
 		else
 		{
 			$find = '<input type="text" name="regex['.$a.'][find]" id="find'.$a.'" value="'.$model->get_find().'" class="find form-control" placeholder="Regex pattern '.$b.'" '.$required.'/>';
-			$replace = '<input type="text" name="regex['.$a.'][replace]" id="replace'.$a.'" value="'.$model->get_replace().'" class="replace form-control" placeholder="Replacement string '.$b.'" '.$required.'/>';
+			$replace = '<input type="text" name="regex['.$a.'][replace]" id="replace'.$a.'" value="'.$model->get_replace().'" class="replace form-control" placeholder="Replacement string '.$b.'" />';
 			$textareaClass = '';
 		}
 
@@ -149,7 +149,7 @@ class regex_check_child_view_html extends regex_check_child_view
 		{
 			$output .= '
 						<dt>Sample:</dt>
-							<dd class="sample">'.$this->show_space(htmlspecialchars($this->trim_sample($report['sample']))).'</dd>';
+							<dd class="sample '.$this->trim_sample_class($report['sample']).'">'.$this->show_space(htmlspecialchars($report['sample'])).'</dd>';
 		}
 
 		if( $report['time'] == -1 )
@@ -239,7 +239,7 @@ class regex_check_child_view_html extends regex_check_child_view
 		self::one_more_tab();
 		if( is_string($input[0]) && !empty($input[0]) )
 		{
-			$output = "\n".self::$tab.'<span class="'.$this->trim_matched($input[0]).'">'.$this->show_space(htmlspecialchars($input[0])).'</span>';
+			$output = "\n".self::$tab.'<span class="'.$this->trim_matched_class($input[0]).'">'.$this->show_space(htmlspecialchars($input[0])).'</span>';
 			if( isset($input[1]) )
 			{
 				unset($input[0]);
@@ -275,7 +275,7 @@ class regex_check_child_view_html extends regex_check_child_view
 								$key = '&nbsp;';
 								$a += 1;
 							}
-							$output .= '<li class="'.$li_class.'"><span class="name">'.$key.'</span> <span class="value '.$this->trim_matched($v0).'">'.$this->show_space(htmlspecialchars($v0),'matched').'</span></li>';
+							$output .= '<li class="'.$li_class.'"><span class="name">'.$key.'</span> <span class="value '.$this->trim_matched_class($v0).'">'.$this->show_space(htmlspecialchars($v0),'matched').'</span></li>';
 						}
 						else
 						{
@@ -290,7 +290,7 @@ class regex_check_child_view_html extends regex_check_child_view
 					$output .= '<ol class="matched-parts">';
 					foreach( $input as $v0 )
 					{
-						$output .= "\n".self::$tab.'<li class="'.$this->trim_matched($v0).'">'.$this->show_space(htmlspecialchars($v0),'matched').'</li>';
+						$output .= "\n".self::$tab.'<li class="'.$this->trim_matched_class($v0).'">'.$this->show_space(htmlspecialchars($v0),'matched').'</li>';
 //						$output .= "\n".self::$tab.'<li>'.$this->show_space($v0).'</li>';
 					}
 				}
@@ -366,7 +366,7 @@ class regex_check_child_view_html extends regex_check_child_view
 
 
 
-	protected function trim_sample( &$input )
+	protected function trim_sample_class( &$input )
 	{
 		if( strlen($input) > self::$sample_len )
 		{
@@ -376,7 +376,7 @@ class regex_check_child_view_html extends regex_check_child_view
 		return 'whole';
 	}
 
-	protected function trim_matched( &$input )
+	protected function trim_matched_class( &$input )
 	{
 		if( strlen($input) > self::$matched_len )
 		{
