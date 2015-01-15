@@ -12,6 +12,9 @@ class regex_check_parent_view_html extends regex_check_parent_view
 		$extra_tabs = '';
 		$output = '';
 		$regexes = $this->model->get_prop('regexes');
+		$sample_len_cls = '';
+		$matched_len_cls = '';
+		$regex_delim_cls = '';
 		$active = '';
 
 		$show_output = false;
@@ -135,6 +138,18 @@ class regex_check_parent_view_html extends regex_check_parent_view
 				$active_regex_cls = '';
 		}
 
+		if( !$this->model->get_prop('sample_len_ok') )
+		{
+			$sample_len_cls = ' class="error"';
+		}
+		if( !$this->model->get_prop('matched_len_ok') )
+		{
+			$matched_len_cls = ' class="error"';
+		}
+		if( !$this->model->get_prop('regex_delim_ok') )
+		{
+			$regex_delim_cls = ' class="error"';
+		}
 
 		$find = array(
 			 '{{REQUEST_URI}}'				//  [0] $this->model->get_prop('request_uri')
@@ -155,6 +170,12 @@ class regex_check_parent_view_html extends regex_check_parent_view
 			,'{{WS_TRIM_LABEL_CLS}}'		// [15] $ws_trim_true_label_cls
 			,'{{WS_TRIM_TRUE}}'				// [16] $ws_trim_true
 			,'{{WS_TRIM_FALSE}}'			// [17] $ws_trim_false
+			,'{{SAMPLE_LEN}}'				// [18] $this->model->get_static_prop('sample_len')
+			,'{{SAMPLE_LEN_CLS}}'			// [19] $sample_len_cls
+			,'{{MATCHED_LEN}}'				// [20] $this->model->get_static_prop('matched_len')
+			,'{{MATCHED_LEN_CLS}}'			// [21] $matched_len_cls
+			,'{{REGEX_DELIM}}'				// [22] $this->model->get_static_prop('regex_delim')
+			,'{{REGEX_DELIM_CLS}}'			// [23] $regex_delim_cls
 		);
 
 		$replace = array(
@@ -176,6 +197,12 @@ class regex_check_parent_view_html extends regex_check_parent_view
 			,$ws_trim_label_cls			// [16] WS_TRIM_TRUE_LABEL_CLS
 			,$ws_trim_true				// [15] WS_TRIM_TRUE
 			,$ws_trim_false				// [17] WS_TRIM_FALSE
+			,$this->model->get_prop('sample_len')	// [18] SAMPLE_LEN
+			,$sample_len_cls			// [19] SAMPLE_LEN_CLS
+			,$this->model->get_prop('matched_len')	// [19] MATCHED_LEN
+			,$matched_len_cls			// [21] MATCHED_LEN_CLS
+			,$this->model->get_prop('regex_delim')	// [20] DELIM_CLOSE
+			,$regex_delim_cls			// [23] REGEX_DELIM_CLS
 		);
 
 		return str_replace( $find , $replace , file_get_contents('regex_check_template.html') );

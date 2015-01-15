@@ -17,13 +17,17 @@
 				<li{{ACTIVE_SAMPLE_CLS}}><a href="#input" data-toggle="tab">Input</a></li>
 				<li{{ACTIVE_REGEX_CLS}}><a href="#regexes" data-toggle="tab">Regex</a></li>
 {{EXTRA_TABS}}
+				<li><a href="#settings" data-toggle="tab">Settings</a></li>
 			</ul>
 
 			<div class="tab-content">
 				<fieldset id="input" class="tab-pane fade{{ACTIVE_SAMPLE}}">
 					<legend>Sample</legend>
 					<textarea id="sample" name="sample" class="form-control">{{SAMPLE}}</textarea>
-					<h2>Clean white space options</h2>
+
+					<h2>Sample settings</h2>
+
+					<!-- <h3>Clean white space options</h3> -->
 					<ul class="inline">
 						<li>
 							<label>
@@ -46,7 +50,7 @@
 						</li>
 					</ul>
 
-					<h2>Split sample</h2>
+					<!-- <h3>Split sample</h3> -->
 					<ul class="inline">
 						<li>
 							<label>
@@ -85,8 +89,35 @@
 						<p class="note"><strong>NOTE:</strong> Pairs with no pattern in the "Find" field will be ignored.</p>
 					</div>
 				</fieldset>
+
 {{RESULTS}}
 {{OUTPUT}}
+
+				<fieldset id="settings" class="tab-pane fade">
+					<legend>General Settings</legend>
+
+					<h2>Truncate long strings</h2>
+					<p>When viewing results, it's often convenient (and faster) to truncate the sample or matched strings.</p>
+					<ul class="inline">
+						<li{{SAMPLE_LEN_CLS}}>
+							<label for="sample_len">Maximum length of sample in results:</label>
+							<input type="number" name="sample_len" id="sample_len" value="{{SAMPLE_LEN}}" min="6" step="1" pattern="^[0-9]+$" size="4" />
+						</li>
+						<li{{MATCHED_LEN_CLS}}>
+							<label for="matched_len">Maximum length of a matched part in results:</label>
+							<input type="number" name="matched_len" id="matched_len" value="{{MATCHED_LEN}}" min="6" step="1" pattern="^[0-9]+$" size="1" />
+						</li>
+					</ul>
+					<h2>Regular Expression delimiters</h2>
+					<p>Some regex engines (like PHP) require delimiters to identify the start and end of the regex.</p>
+					<ul class="inline">
+						<li{{REGEX_DELIM_CLS}}>
+							<label for="regex_delim">Delimiter:</label>
+							<input type="text" name="regex_delim" id="regex_delim" value="{{REGEX_DELIM}}" pattern="^[^0-9a-z\s\\]$" maxlength="1" size="4" />
+							<p><strong>NOTE:</strong> If the delimiter is a bracket/brace the delimiters will automatically be paired so the opening delimiter is the opening bracket/brace and the closing delimiter is it's closing equivalent.</p>
+						</li>
+					</ul>
+				</fieldset>
 			</div>
 
 			<fieldset id="butt">

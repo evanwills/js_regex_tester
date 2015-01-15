@@ -15,6 +15,13 @@ class regex_check_parent_model
 	protected $test_only = true;
 	protected $dummy = true;
 	protected $request_url = '';
+	protected $sample_len = 300;
+	protected $sample_len_ok = true;
+	protected $matched_len = 300;
+	protected $matched_len_ok = true;
+	protected $regex_delim = '`';
+	protected $regex_delim_ok = true;
+
 
 	public function __construct()
 	{
@@ -22,7 +29,7 @@ class regex_check_parent_model
 		if( isset($_POST) )
 		{
 			$this->dummy = false;
-			$this->sample = isset($_POST['sample'])?$_POST['sample']:'';
+			$this->sample = isset($_POST['sample'])?$_POST['sample']:$this->sample;
 			$this->ws_trim = isset($_POST['ws_trim'])?true:false;
 			if( isset($_POST['ws_action']) && $_POST['ws_action'] == 'before' )
 			{
@@ -34,7 +41,18 @@ class regex_check_parent_model
 			}
 
 			$this->split_sample = isset($_POST['split_sample'])?true:false;
-			$this->split_delim = isset($_POST['split_delim'])?$_POST['split_delim']:'\n';
+			$this->split_delim = isset($_POST['split_delim'])?$_POST['split_delim']:$this->split_delim;
+			$this->regex_delim = isset($_POST['regex_delim'])?$_POST['regex_delim']:$this->regex_delim;
+
+			if( !regex_check_child_model::set_regex_delim($this->regex_delim) )
+			{
+				$this->regex_delim = regex_check_child_model::get_regex_delim();
+				$this->regex_delim_ok = false;
+			}
+
+			$this->sample_len = isset($_POST['sample_len'])?$_POST['sample_len']:$this->sample_len;
+			$this->matched_len = isset($_POST['matched_len'])?$_POST['matched_len']:$this->matched_len;
+
 
 			if( isset( $_POST['regex'] ) && is_array($_POST['regex']) && !empty($_POST['regex']) )
 			{
@@ -132,5 +150,15 @@ class regex_check_parent_model
 		}
 	}
 
-
+	public function set_len_not_ok( $len = 'sample' )
+	{
+		if( $len == 'sample' )
+		{
+			$this->sample_len_ok = false;
+		}
+		if( $len == 'matched' )
+		{
+			$this->matched_len_ok = false;
+		}
+	}
 }

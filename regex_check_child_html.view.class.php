@@ -149,7 +149,7 @@ class regex_check_child_view_html extends regex_check_child_view
 		{
 			$output .= '
 						<dt>Sample:</dt>
-							<dd class="sample">'.$this->show_space(htmlspecialchars($report['sample'])).'</dd>';
+							<dd class="sample">'.$this->show_space(htmlspecialchars($this->trim_sample($report['sample']))).'</dd>';
 		}
 
 		if( $report['time'] == -1 )
@@ -239,8 +239,7 @@ class regex_check_child_view_html extends regex_check_child_view
 		self::one_more_tab();
 		if( is_string($input[0]) && !empty($input[0]) )
 		{
-			$output = "\n".self::$tab.'<span class="whole">'.$this->show_space(htmlspecialchars($input[0])).'</span>';
-//			$output = "\n".self::$tab.'<span class="whole">'.$this->show_space($input[0]).'</span>';
+			$output = "\n".self::$tab.'<span class="'.$this->trim_matched($input[0]).'">'.$this->show_space(htmlspecialchars($input[0])).'</span>';
 			if( isset($input[1]) )
 			{
 				unset($input[0]);
@@ -267,14 +266,16 @@ class regex_check_child_view_html extends regex_check_child_view
 							$output .= "\n".self::$tab;
 							if( is_string($key) )
 							{
-								$output .= '<li class="has-name"><span class="name">['.$key.']</span> <span class="value">'.$this->show_space(htmlspecialchars($v0),'matched').'</span></li>';
+								$li_class = 'has-name';
 								$named = true;
 							}
 							else
 							{
+								$li_class = 'no-name';
+								$key = '&nbsp;';
 								$a += 1;
-								$output .= '<li class="no-name"><span class="name">&nbsp;</span> <span class="value">'.$this->show_space(htmlspecialchars($v0),'matched').'</span></li>';
 							}
+							$output .= '<li class="'.$li_class.'"><span class="name">'.$key.'</span> <span class="value '.$this->trim_matched($v0).'">'.$this->show_space(htmlspecialchars($v0),'matched').'</span></li>';
 						}
 						else
 						{
@@ -289,7 +290,7 @@ class regex_check_child_view_html extends regex_check_child_view
 					$output .= '<ol class="matched-parts">';
 					foreach( $input as $v0 )
 					{
-						$output .= "\n".self::$tab.'<li>'.$this->show_space(htmlspecialchars($v0),'matched').'</li>';
+						$output .= "\n".self::$tab.'<li class="'.$this->trim_matched($v0).'">'.$this->show_space(htmlspecialchars($v0),'matched').'</li>';
 //						$output .= "\n".self::$tab.'<li>'.$this->show_space($v0).'</li>';
 					}
 				}
@@ -341,34 +342,6 @@ class regex_check_child_view_html extends regex_check_child_view
 		return str_replace($find , $replace , $input );
 	}
 
-	static public function set_sample_len( $input , $type = 'both' )
-	{
-		if( is_string($type) && is_int($input) && ( $input > 6 || $input == 0 ) )
-		{
-			if( $type == 'both' )
-			{
-				self::$result_strings['matched']['len'] = $input;
-				self::$result_strings['matched']['len_sub'] = ( $input - 3 );
-				self::$result_strings['sample']['len'] = $input;
-				self::$result_strings['sample']['len_sub'] = ( $input - 3 );
-			}
-			elseif( isset(self::$result_strings[$type]) )
-			{
-				self::$result_strings[$type]['len'] = $input;
-				self::$result_strings[$type]['len_sub'] = ( $input - 3 );
-			}
-		}
-	}
-
-	static public function get_sample_len( $type = 'matched' )
-	{
-		if( !is_string($type) || !isset(self::$result_strings[$type]) )
-		{
-			$type = 'matched';
-		}
-		return self::$result_strings[$type];
-	}
-
 	static public function set_tab( $tcount )
 	{
 		if( is_numeric( $tcount ) )
@@ -391,5 +364,26 @@ class regex_check_child_view_html extends regex_check_child_view
 		self::$tab .= "\t";
 	}
 
+
+
+	protected function trim_sample( &$input )
+	{
+		if( strlen($input) > self::$sample_len )
+		{
+			$input = substr( $input , 0 , ( self::$sample_len - 3 ) ).'...';
+			return 'truncated';
+		}
+		return 'whole';
+	}
+
+	protected function trim_matched( &$input )
+	{
+		if( strlen($input) > self::$matched_len )
+		{
+			$input = substr( $input , 0 , ( self::$matched_len - 3 ) ).'...';
+			return 'truncated';
+		}
+		return 'whole';
+	}
 
 }

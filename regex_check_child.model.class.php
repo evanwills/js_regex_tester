@@ -12,6 +12,9 @@ class regex_check_child_model
 	private $errors = array('modifiers' => '');
 	private $report = array();
 
+	private static $delim_open = '`';
+	private static $delim_close = '`';
+
 
 	public function __construct( $find , $replace , $modifiers , $multiline )
 	{
@@ -73,7 +76,7 @@ class regex_check_child_model
 	}
 	public function get_regex()
 	{
-		return "`{$this->find}`{$this->modifiers}";
+		return self::$delim_open . $this->find . self::$delim_close . $this->modifiers;
 	}
 
 	public function get_find()
@@ -125,5 +128,54 @@ class regex_check_child_model
 	public function get_report()
 	{
 		return $this->report;
+	}
+
+	public static function set_regex_delim( $delim )
+	{
+		if( is_string($delim) && strlen($delim) == 1 && preg_match('`^[^a-z0-9\s\\\\]$`',$delim) )
+		{
+			switch( $delim )
+			{
+				case '{':
+				case '}':
+					self::$delim_open = '{';
+					self::$delim_close = '}';
+					break;
+				case '[':
+				case ']':
+					self::$delim_open = '[';
+					self::$delim_close = ']';
+					break;
+				case '<':
+				case '>':
+					self::$delim_open = '<';
+					self::$delim_close = '>';
+					break;
+				case '(':
+				case ')':
+					self::$delim_open = '(';
+					self::$delim_close = ')';
+					break;
+				default:
+					self::$delim_open = self::$delim_close = $delim;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public static function get_regex_delim()
+	{
+		return self::$delim_open;
+	}
+
+	public function set_delim( $delim )
+	{
+		return self::set_regex_delim($delim);
+	}
+
+	public function get_delim()
+	{
+		return self::$delim_open;
 	}
 }
