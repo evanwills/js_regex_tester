@@ -98,7 +98,7 @@
 
 					<h2>Truncate long strings</h2>
 					<p>When viewing results, it's often convenient (and faster) to truncate the sample or matched strings.</p>
-					<ul class="inline">
+					<ul>
 						<li{{SAMPLE_LEN_CLS}}>
 							<label for="sample_len">Maximum length of sample in results:</label>
 							<input type="number" name="sample_len" id="sample_len" value="{{SAMPLE_LEN}}" min="6" step="1" pattern="^[0-9]+$" size="4" />
@@ -110,7 +110,7 @@
 					</ul>
 					<h2>Regular Expression delimiters</h2>
 					<p>Some regex engines (like PHP) require delimiters to identify the start and end of the regex.</p>
-					<ul class="inline">
+					<ul>
 						<li{{REGEX_DELIM_CLS}}>
 							<label for="regex_delim">Delimiter:</label>
 							<input type="text" name="regex_delim" id="regex_delim" value="{{REGEX_DELIM}}" pattern="^[^0-9a-z\s\\]$" maxlength="1" size="4" />
