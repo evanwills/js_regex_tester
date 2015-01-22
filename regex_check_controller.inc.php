@@ -1,7 +1,7 @@
 <?php
 
 require_once('bootstrap.inc.php');
-require_once($cls.'regex/regex.class.php');
+require_once('preg_test/regex.class.php');
 require_once('regex_check_parent.model.class.php');
 require_once('regex_check_parent.view.class.php');
 require_once('regex_check_child.model.class.php');
