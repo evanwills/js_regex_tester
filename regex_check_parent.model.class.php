@@ -98,11 +98,30 @@ class regex_check_parent_model
 				for( $a = 0 ; $a < count($_POST['regex']) ; $a += 1 )
 				{
 					$find = isset($_POST['regex'][$a]['find'])?$_POST['regex'][$a]['find']:'';
-					$replace = isset($_POST['regex'][$a]['replace'])?$_POST['regex'][$a]['replace']:'';
+					$replace =  preg_replace_callback(
+								 '`(?<!\\\\)\\\\([rnt])`'
+								,function($matches)
+									{
+										switch($matches[1])
+										{
+											case 'n':
+												return "\n";
+												break;
+											case 'r':
+												return "\r";
+												break;
+											case 't':
+												return "\t";
+												break;
+										}
+									}
+								,isset($_POST['regex'][$a]['replace'])?$_POST['regex'][$a]['replace']:''
+							);
 					$modifiers = isset($_POST['regex'][$a]['modifiers'])?$_POST['regex'][$a]['modifiers']:'';
 					$makeTextarea = isset($_POST['regex'][$a]['makeTextarea'])?true:false;
 					$tmp = new regex_check_child_model( $find , $replace , $modifiers , $makeTextarea );
 					$this->regexes[] = $tmp;
+
 					for( $b = 0 ; $b < count($output) ; $b +=1 )
 					{
 						$output[$b] = $tmp->process($output[$b]);
@@ -136,6 +155,26 @@ class regex_check_parent_model
 			}
 			$this->request_uri = $_SERVER['REQUEST_URI'];
 		}
+	}
+
+	private function fix_white_spaces( $input )
+	{
+		return preg_replace_callback(
+			 '`(?<!\\\\)\\\\([rnt])`'
+			,function($matches)
+				{
+					switch($matches[1])
+					{
+						case 'n': return "\n";
+							break;
+						case 'r': return "\r";
+							break;
+						case 't': return "\t";
+							break;
+					}
+				}
+			,$input
+		);
 	}
 
 	public function get_prop( $prop_name )
