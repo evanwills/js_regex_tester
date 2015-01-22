@@ -121,7 +121,7 @@ class regex_check_child_model
 
 	public function get_errors()
 	{
-		return array_merge($this->errors,$this->regex->get_errors());
+		return array_merge($this->erorrs,$this->regex->get_errors());
 
 	}
 
